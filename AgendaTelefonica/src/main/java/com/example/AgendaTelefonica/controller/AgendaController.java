@@ -14,49 +14,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.example.AgendaTelefonica.DTOS.PessoaDTOS;
-import com.example.AgendaTelefonica.services.PessoaService;
+import com.example.AgendaTelefonica.DTOS.AgendaDTO;
+import com.example.AgendaTelefonica.services.AgendaService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/pessoas")
-public class PessoaController {
+@RequestMapping("/Agendas")
+public class AgendaController {
 
 	@Autowired
-	PessoaService service;
+	AgendaService service;
 	
 	@GetMapping
-	public List<PessoaDTOS> getAll(){
-		return service.getAllPessoas();
+	public List<AgendaDTO> getAll(){
+		return service.getAllAgendas();
 	}
 	
 	/*@GetMapping("/{telefones}")
-	public PessoaDTOS getByTelefone(@PathVariable(value="telefones")  String telefone) {
+	public AgendaDTOS getByTelefone(@PathVariable(value="telefones")  String telefone) {
 		return service.getByTelefone(telefone);
 	}*/
 	
 	@GetMapping("/{nome}")
-	public PessoaDTOS getByNome(@PathVariable(value="nome")  String nome) {
+	public AgendaDTO getByNome(@PathVariable(value="nome")  String nome) {
 		return service.getByNome(nome);
 	}
 	
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<PessoaDTOS> atualizar(@PathVariable Long id, @RequestBody @Valid PessoaDTOS pessoaDto){
-		return service.atualizar(id,pessoaDto);
+	public ResponseEntity<AgendaDTO> atualizar(@PathVariable Long id, @RequestBody @Valid AgendaDTO AgendaDto){
+		return service.atualizar(id,AgendaDto);
 	}
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<PessoaDTOS> apagar(@PathVariable(value="id")  Long id){
+	public ResponseEntity<AgendaDTO> apagar(@PathVariable(value="id")  Long id){
 		return service.deletar(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<PessoaDTOS> cadastrar(@RequestBody @Valid PessoaDTOS pessoaDto, UriComponentsBuilder uriBuilder) {
-		return service.cadastrar(pessoaDto, uriBuilder);
+	public ResponseEntity<AgendaDTO> cadastrar(@RequestBody @Valid AgendaDTO AgendaDto, UriComponentsBuilder uriBuilder) {
+		return service.cadastrar(AgendaDto, uriBuilder);
 	}
 	
 }

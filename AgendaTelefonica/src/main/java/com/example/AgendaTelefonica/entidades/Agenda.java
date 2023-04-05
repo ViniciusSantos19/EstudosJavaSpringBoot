@@ -9,8 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
-@Entity(name = "pessoas")
-public class Pessoa {
+@Entity(name = "Agendas")
+public class Agenda {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Pessoa {
 	private String endereco;
 	
 	@OneToMany(mappedBy = "dono")
-	private List<Telefone> telefones= new ArrayList<Telefone>();
+	private List<Numero> numeros= new ArrayList<Numero>();
 
 	public Long getId() {
 		return id;
@@ -64,12 +64,12 @@ public class Pessoa {
 		this.endereco = endereco;
 	}
 
-	public List<Telefone> getTelefones() {
-		return telefones;
+	public List<Numero> getTelefones() {
+		return numeros;
 	}
 
-	public void setTelefones(List<Telefone> telefones) {
-		this.telefones = telefones;
+	public void setTelefones(List<Numero> numeros) {
+		this.numeros = numeros;
 	}
 	
 	

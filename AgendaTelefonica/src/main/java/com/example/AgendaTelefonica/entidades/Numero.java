@@ -8,14 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-@Entity(name = "telefones")
-public class Telefone {
+@Entity(name = "Numeros")
+public class Numero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne
-	private Pessoa dono;
+	private Agenda dono;
 	 
 	private String numero;
 	
@@ -30,11 +30,11 @@ public class Telefone {
 		this.id = id;
 	}
 
-	public Pessoa getDono() {
+	public Agenda getDono() {
 		return dono;
 	}
 
-	public void setDono(Pessoa dono) {
+	public void setDono(Agenda dono) {
 		this.dono = dono;
 	}
 
