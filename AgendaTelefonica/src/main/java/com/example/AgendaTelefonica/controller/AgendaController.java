@@ -31,17 +31,16 @@ public class AgendaController {
 	public List<AgendaDTO> getAll(){
 		return service.getAllAgendas();
 	}
-	
-	/*@GetMapping("/{telefones}")
-	public AgendaDTOS getByTelefone(@PathVariable(value="telefones")  String telefone) {
-		return service.getByTelefone(telefone);
-	}*/
-	
-	@GetMapping("/{nome}")
+
+	@GetMapping("/nome/{nome}")
 	public AgendaDTO getByNome(@PathVariable(value="nome")  String nome) {
 		return service.getByNome(nome);
 	}
-	
+
+	@GetMapping("/id/{id}")
+	public AgendaDTO getById(@PathVariable(value="id")  Long id) {
+		return service.getById(id);
+	}
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<AgendaDTO> atualizar(@PathVariable Long id, @RequestBody @Valid AgendaDTO AgendaDto){

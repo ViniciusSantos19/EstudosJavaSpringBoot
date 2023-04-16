@@ -10,7 +10,5 @@ import com.example.AgendaTelefonica.entidades.Numero;
 public interface NumeroRepository extends JpaRepository<Numero, Long>{
 	
 	public List<Numero> findAll();
-	
-	public Optional<Numero> findByDono(Long id);
-	
+
 }

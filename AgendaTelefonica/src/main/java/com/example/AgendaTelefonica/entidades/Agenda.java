@@ -2,12 +2,10 @@ package com.example.AgendaTelefonica.entidades;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import com.example.AgendaTelefonica.DTOS.AgendaDTO;
+import jakarta.persistence.*;
 
 @Entity(name = "Agendas")
 public class Agenda {
@@ -20,9 +18,34 @@ public class Agenda {
 	private String sobrenome;
 	private String email;
 	private String endereco;
-	
-	@OneToMany(mappedBy = "dono")
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "Agenda_id")
 	private List<Numero> numeros= new ArrayList<Numero>();
+
+	public Agenda() {}
+
+	public Agenda(Long id, String nome,
+				  String sobrenome,
+				  String email,
+				  String endereco,
+				  List<Numero> numeros) {
+		this.id = id;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.email = email;
+		this.endereco = endereco;
+		this.numeros = numeros;
+	}
+
+	public Agenda(AgendaDTO dto){
+		this.id = dto.id();
+		this.nome = dto.nome();
+		this.sobrenome = dto.sobrenome();
+		this.email = dto.email();
+		this.endereco = dto.endereco();
+		this.numeros = dto.telefones().stream().map(Numero::new).collect(Collectors.toList());
+	}
 
 	public Long getId() {
 		return id;

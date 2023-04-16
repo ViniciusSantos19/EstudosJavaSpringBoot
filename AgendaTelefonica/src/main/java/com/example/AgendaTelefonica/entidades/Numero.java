@@ -1,5 +1,6 @@
 package com.example.AgendaTelefonica.entidades;
 
+import com.example.AgendaTelefonica.DTOS.NumeroDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,14 +14,25 @@ public class Numero {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@ManyToOne
-	private Agenda dono;
-	 
+
 	private String numero;
 	
 	@Enumerated(EnumType.STRING)
 	private Categoria categoria;
+
+	public Numero(Long id, String numero, Categoria categoria) {
+		this.id = id;
+		this.numero = numero;
+		this.categoria = categoria;
+	}
+
+	public Numero(NumeroDTO dto){
+		this.id = dto.id();
+		this.numero = dto.numero();
+		this.categoria = dto.categoria();
+	}
+
+	public Numero(){}
 
 	public Long getId() {
 		return id;
@@ -28,14 +40,6 @@ public class Numero {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Agenda getDono() {
-		return dono;
-	}
-
-	public void setDono(Agenda dono) {
-		this.dono = dono;
 	}
 
 	public String getNumero() {
