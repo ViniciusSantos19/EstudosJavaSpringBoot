@@ -1,5 +1,7 @@
 package exemplo.Consultorio.service;
 
+import java.net.URI;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,11 +14,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.util.UriComponentsBuilder;
 
 
 import exemplo.Consultorio.Dtos.MedicoDto;
 import exemplo.Consultorio.entidades.Medico;
 import exemplo.Consultorio.repositorios.MedicoRepository;
+import jakarta.validation.Valid;
 
 @Service
 public class MedicoService {
@@ -33,10 +38,8 @@ public class MedicoService {
 	}
 	
 	public List<MedicoDto> listarMedicos() {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("nome").ascending());
-        Page<Medico> medicos = repository.findAll(pageable);
-        List<Medico> lista = medicos.getContent();
-        return this.converteEmMedicoDto(lista);
+     
+        return this.converteEmMedicoDto(repository.findAll(Sort.by(Sort.Direction.ASC, "nome")));
     }
 	
 	   public ResponseEntity<MedicoDto> updateMedico(MedicoDto medicoDto, Long id){
@@ -61,9 +64,8 @@ public class MedicoService {
 	        if(medicoOptional.isPresent()){
 	            Medico medico = medicoOptional.get();
 	            medico.setId(id);
-	            medico.setNome("inativo");
-	            medico.setEmail("Inativo");
-	            medico.setTelefone("Inativo");
+	            medico.setAtividade(false);
+	            
 	            
 	            ResponseEntity<MedicoDto> ent = new ResponseEntity<MedicoDto>(new MedicoDto(medico.getNome(),
 	    				medico.getTelefone(),
@@ -77,5 +79,20 @@ public class MedicoService {
 	        }
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
+	   
+	   public ResponseEntity<MedicoDto> insertIntoMedico(MedicoDto medicoDto, UriComponentsBuilder uriBuilder){
+		   Medico medico = new Medico(medicoDto);
+		   repository.save(medico);
+		   URI url = uriBuilder.path("/Medicos/{id}").buildAndExpand(medico.getId()).toUri();
+		   return ResponseEntity.created(url).body(new MedicoDto(
+				   medico.getNome(),
+				   medico.getTelefone(),
+				   medico.getEmail(),
+				   medico.getCrm(),
+				   medico.getEspecialidade()
+				   ));
+	   }
+             
+	   
 	
 }

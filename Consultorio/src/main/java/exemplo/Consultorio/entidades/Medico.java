@@ -32,6 +32,17 @@ public class Medico {
 	@Column(nullable = false)
 	private Especialidade  especialidade;
 	
+	@Column(name = "Ativo")
+	private Boolean atividade = true;
+	
+	public Boolean isAtivo() {
+		return this.atividade;
+	}
+	
+	public void setAtividade(Boolean atividade) {
+		this.atividade = atividade;
+	}
+	
 	public Medico() {
 		
 	}
@@ -40,6 +51,7 @@ public class Medico {
 	    this.nome = dto.nome();
 	    this.email = dto.email();
 	    this.crm = dto.crm();
+	    this.telefone = dto.telefone();
 	    this.especialidade = dto.especialidade();
 	}
 

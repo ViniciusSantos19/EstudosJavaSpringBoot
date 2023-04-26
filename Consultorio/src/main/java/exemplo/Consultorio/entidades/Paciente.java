@@ -24,6 +24,17 @@ public class Paciente {
 	@Column(nullable = false, unique = true)
 	private String cpf;
 	
+	@Column(name = "Ativo")
+	private Boolean atividade = true;
+	
+	public Boolean isAtivo() {
+		return this.atividade;
+	}
+	
+	public void setAtividade(Boolean atividade) {
+		this.atividade = atividade;
+	}
+	
 	public Paciente() {
 		
 	}

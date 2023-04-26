@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import exemplo.Consultorio.Dtos.ConsultaDto;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,10 @@ public class Consulta {
 	private Paciente paciente;
 	
 	@NotNull
-    private LocalDateTime dataHora;
+    private LocalDateTime dataHoraConsulta;
+	
+	@Column(name = "motivo_cancelamento")
+	private MotivoCancelamento motivoCancelamento;
 
 	public Consulta() {
 		
@@ -36,7 +40,7 @@ public class Consulta {
 	public Consulta(ConsultaDto dto) {
 		this.medico = new Medico(dto.medico());
 		this.paciente = new Paciente(dto.paciente());
-		this.dataHora = dto.dataHora();
+		this.dataHoraConsulta = dto.dataHora();
 	}
 	
 	public Long getId() {
@@ -64,11 +68,11 @@ public class Consulta {
 	}
 
 	public LocalDateTime getDataHora() {
-		return dataHora;
+		return dataHoraConsulta;
 	}
 
 	public void setDataHora(LocalDateTime dataHora) {
-		this.dataHora = dataHora;
+		this.dataHoraConsulta = dataHora;
 	}
 	
 	

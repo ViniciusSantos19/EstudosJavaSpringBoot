@@ -1,5 +1,6 @@
 package exemplo.Consultorio.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import exemplo.Consultorio.Dtos.MedicoDto;
 import exemplo.Consultorio.Dtos.PacienteDto;
@@ -32,14 +34,11 @@ public class PacienteService {
 				a.getCpf())).collect(Collectors.toList());
 	}
 	
-	public List<PacienteDto> listarMedicos() {
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("nome").ascending());
-        Page<Paciente> pacientes = repository.findAll(pageable);
-        List<Paciente> lista = pacientes.getContent();
-        return this.converteEmPacienteDto(lista);
+	public List<PacienteDto> listarPacientes() {
+        return this.converteEmPacienteDto(repository.findAll(Sort.by(Sort.Direction.ASC, "nome")));
     }
 	
-	   public ResponseEntity<PacienteDto> updateMedico(PacienteDto pacienteDto, Long id){
+	   public ResponseEntity<PacienteDto> updatePaciente(PacienteDto pacienteDto, Long id){
 	        Optional<Paciente> pacienteOptional = repository.findById(id);
 	        if(pacienteOptional.isPresent()){
 	            Paciente paciente = pacienteOptional.get();
@@ -56,14 +55,12 @@ public class PacienteService {
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	   
-	   public ResponseEntity<PacienteDto> deleteMedico(Long id){
+	   public ResponseEntity<PacienteDto> deletePaciente(Long id){
 	        Optional<Paciente> pacienteOptional = repository.findById(id);
 	        if(pacienteOptional.isPresent()){
 	            Paciente paciente = pacienteOptional.get();
 	            paciente.setId(id);
-	            paciente.setNome("inativo");
-	            paciente.setEmail("Inativo");
-	            paciente.setTelefone("Inativo");
+	            paciente.setAtividade(false);
 	            
 	            ResponseEntity<PacienteDto> ent = new ResponseEntity<PacienteDto>(new PacienteDto(
 	            		paciente.getNome(),
@@ -77,5 +74,18 @@ public class PacienteService {
 	        }
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
+	   
+	   public ResponseEntity<PacienteDto> insertIntoPaciente(PacienteDto PacienteDto, UriComponentsBuilder uriBuilder){
+		   Paciente paciente = new Paciente(PacienteDto);
+		   repository.save(paciente);
+		   URI url = uriBuilder.path("/Pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
+		   return ResponseEntity.created(url).body(new PacienteDto(
+				paciente.getNome(),
+   				paciente.getTelefone(),
+   				paciente.getEmail(),
+   				paciente.getCpf()
+				   ));
+	   }
+	   
 	
 }
